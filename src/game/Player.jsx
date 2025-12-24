@@ -7,9 +7,11 @@ import * as THREE from 'three';
 
 export const Player = () => {
   const { camera } = useThree();
+  
+  // FIX: Spawn at [-35, 5, -35] (Top Left Corner) instead of [0,2,0] (Center Wall)
   const [ref, api] = useSphere(() => ({ 
     mass: 1, 
-    position: [0, 2, 0], 
+    position: [-35, 5, -35], 
     fixedRotation: true, 
     linearDamping: 0.9 
   }));
@@ -19,11 +21,12 @@ export const Player = () => {
   useEffect(() => api.velocity.subscribe((v) => (velocity.current = v)), [api.velocity]);
 
   useFrame(() => {
+    // Force Game State to PLAYING if it's stuck
     if (useStore.getState().gameState !== 'PLAYING') return;
 
     const { forward, backward, left, right, jump } = getKeys();
     
-    // Sync Camera
+    // Sync Camera to Physics Body
     camera.position.copy(ref.current.position);
 
     // Movement Logic
@@ -34,7 +37,6 @@ export const Player = () => {
 
     direction.subVectors(frontVector, sideVector).normalize().multiplyScalar(speed);
     
-    // Apply camera rotation
     const euler = new THREE.Euler(0, camera.rotation.y, 0, 'YXZ');
     direction.applyEuler(euler);
 
@@ -46,6 +48,10 @@ export const Player = () => {
   });
 
   return (
-    <mesh ref={ref} /> // Invisible collider
+    <>
+      <mesh ref={ref} />
+      {/* Add a bright light attached to player so you can ALWAYS see */}
+      <pointLight position={[0, 1, 0]} intensity={1.5} distance={20} color="white" />
+    </>
   );
 };
