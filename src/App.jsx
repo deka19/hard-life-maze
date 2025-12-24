@@ -2,6 +2,8 @@ import React, { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Physics } from '@react-three/cannon';
 import { KeyboardControls, PointerLockControls } from '@react-three/drei';
+
+// These imports work because App.jsx is now in src/
 import { Maze } from './game/Maze';
 import { Player } from './game/Player';
 import { Hazards } from './game/Hazards';
@@ -26,13 +28,12 @@ export default function App() {
       <Interface />
       <KeyboardControls map={keyboardMap}>
         <Canvas shadows camera={{ fov: 75 }}>
-          {/* 1. ATMOSPHERE */}
+          {/* Atmosphere */}
           <color attach="background" args={['#050505']} />
-          <fog attach="fog" args={['#050505', 0, 15]} /> {/* Dark Fog */}
-          
-          <ambientLight intensity={0.1} /> {/* Very dim global light */}
+          <fog attach="fog" args={['#050505', 0, 25]} />
+          <ambientLight intensity={0.1} />
 
-          {/* 2. PHYSICS (Debug REMOVED) */}
+          {/* Physics World */}
           <Physics gravity={[0, -30, 0]}> 
             <Suspense fallback={null}>
               {gameState === 'PLAYING' && <Player />}
