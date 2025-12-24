@@ -18,6 +18,7 @@ export default function App() {
     { name: 'left', keys: ['ArrowLeft', 'a', 'A'] },
     { name: 'right', keys: ['ArrowRight', 'd', 'D'] },
     { name: 'jump', keys: ['Space'] },
+    { name: 'map', keys: ['m', 'M'] }
   ];
 
   return (
@@ -25,15 +26,14 @@ export default function App() {
       <Interface />
       <KeyboardControls map={keyboardMap}>
         <Canvas shadows camera={{ fov: 75 }}>
-          {/* 1. Add Background Color so you don't see "Void" */}
-          <color attach="background" args={['#101010']} />
+          {/* 1. ATMOSPHERE */}
+          <color attach="background" args={['#050505']} />
+          <fog attach="fog" args={['#050505', 0, 15]} /> {/* Dark Fog */}
           
-          {/* 2. Super Bright Lights */}
-          <ambientLight intensity={0.5} />
-          <directionalLight position={[10, 20, 10]} intensity={1} />
+          <ambientLight intensity={0.1} /> {/* Very dim global light */}
 
-          {/* 3. Physics Debug Mode: Draws red boxes around everything */}
-          <Physics gravity={[0, -25, 0]}> 
+          {/* 2. PHYSICS (Debug REMOVED) */}
+          <Physics gravity={[0, -30, 0]}> 
             <Suspense fallback={null}>
               {gameState === 'PLAYING' && <Player />}
               <Maze />
@@ -41,7 +41,7 @@ export default function App() {
             </Suspense>
           </Physics>
           
-          {gameState === 'PLAYING' && <PointerLockControls />}
+          {gameState === 'PLAYING' && <PointerLockControls selector="#root" />}
         </Canvas>
       </KeyboardControls>
     </>
