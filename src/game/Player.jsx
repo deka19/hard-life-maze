@@ -7,29 +7,38 @@ import * as THREE from 'three';
 
 export const Player = () => {
   const { camera } = useThree();
-  
-  // FIX: Spawn at [-35, 5, -35] (Top Left Corner) instead of [0,2,0] (Center Wall)
   const [ref, api] = useSphere(() => ({ 
     mass: 1, 
-    position: [-35, 5, -35], 
+    position: [-35, 5, -35], // Safe Spawn Point
     fixedRotation: true, 
-    linearDamping: 0.9 
+    linearDamping: 0.95,
+    args: [0.8] 
   }));
   
   const [, getKeys] = useKeyboardControls();
   const velocity = useRef([0, 0, 0]);
+  const pos = useRef([0, 0, 0]);
+
   useEffect(() => api.velocity.subscribe((v) => (velocity.current = v)), [api.velocity]);
+  useEffect(() => api.position.subscribe((p) => {
+      pos.current = p;
+      // Update store for Map to see
+      useStore.getState().setPlayerPos(p);
+  }), [api.position]);
 
   useFrame(() => {
-    // Force Game State to PLAYING if it's stuck
     if (useStore.getState().gameState !== 'PLAYING') return;
 
     const { forward, backward, left, right, jump } = getKeys();
     
-    // Sync Camera to Physics Body
+    // 1. SYNC CAMERA
     camera.position.copy(ref.current.position);
+    // Add slight head bob
+    if (Math.abs(velocity.current[0]) > 0.1 || Math.abs(velocity.current[2]) > 0.1) {
+        camera.position.y += Math.sin(Date.now() / 100) * 0.05;
+    }
 
-    // Movement Logic
+    // 2. MOVEMENT
     const frontVector = new THREE.Vector3(0, 0, Number(backward) - Number(forward));
     const sideVector = new THREE.Vector3(Number(left) - Number(right), 0, 0);
     const direction = new THREE.Vector3();
@@ -43,15 +52,18 @@ export const Player = () => {
     api.velocity.set(direction.x, velocity.current[1], direction.z);
 
     if (jump && Math.abs(velocity.current[1]) < 0.05) {
-      api.velocity.set(velocity.current[0], 10, velocity.current[2]);
+      api.velocity.set(velocity.current[0], 12, velocity.current[2]);
     }
   });
 
   return (
     <>
       <mesh ref={ref} />
-      {/* Add a bright light attached to player so you can ALWAYS see */}
-      <pointLight position={[0, 1, 0]} intensity={1.5} distance={20} color="white" />
+      {/* FLASHLIGHT: Attached to Camera */}
+      <group position={camera.position} rotation={camera.rotation}>
+        <spotLight position={[0.5, 0, 0]} intensity={15} angle={0.6} penumbra={0.5} castShadow distance={40} color="#ffffaa" />
+        <pointLight intensity={1} distance={5} color="#white" />
+      </group>
     </>
   );
 };
