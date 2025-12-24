@@ -25,8 +25,15 @@ export default function App() {
       <Interface />
       <KeyboardControls map={keyboardMap}>
         <Canvas shadows camera={{ fov: 75 }}>
-          <ambientLight intensity={0.2} />
-          <Physics gravity={[0, -25, 0]}>
+          {/* 1. Add Background Color so you don't see "Void" */}
+          <color attach="background" args={['#101010']} />
+          
+          {/* 2. Super Bright Lights */}
+          <ambientLight intensity={0.5} />
+          <directionalLight position={[10, 20, 10]} intensity={1} />
+
+          {/* 3. Physics Debug Mode: Draws red boxes around everything */}
+          <Physics gravity={[0, -25, 0]}> 
             <Suspense fallback={null}>
               {gameState === 'PLAYING' && <Player />}
               <Maze />
@@ -35,13 +42,6 @@ export default function App() {
           </Physics>
           
           {gameState === 'PLAYING' && <PointerLockControls />}
-          
-          {/* Player Flashlight attached to camera */}
-          {gameState === 'PLAYING' && (
-             <group>
-                <spotLight position={[0,5,0]} intensity={10} angle={0.5} penumbra={1} castShadow />
-             </group>
-          )}
         </Canvas>
       </KeyboardControls>
     </>
