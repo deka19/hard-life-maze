@@ -1,12 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Maze of Life</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delhi Student Relief | Emergency Fund</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 antialiased">
+
+    <!-- Hero Section -->
+    <header class="bg-white border-b border-gray-200 pt-12 pb-8 px-4 text-center">
+        <div class="max-w-2xl mx-auto">
+            <span class="bg-red-100 text-red-600 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">Live Emergency Drive</span>
+            <h1 class="text-4xl font-extrabold mt-4 mb-4 leading-tight text-gray-900">Emergency Food & Sanitation for Stranded Students</h1>
+            <p class="text-lg text-gray-600 mb-8">We are on the ground in Delhi providing hot meals, clean water, and heavy-duty sanitation to prevent a health crisis. We need your help to keep the supply going.</p>
+            
+            <!-- Live Progress Bar -->
+            <div class="bg-gray-100 rounded-full h-4 w-full mb-2 overflow-hidden shadow-inner">
+                <!-- Update this width percentage manually as funds roll in -->
+                <div class="bg-blue-600 w-1/4 h-full rounded-full"></div>
+            </div>
+            <div class="flex justify-between text-sm font-semibold text-gray-600 mb-8">
+                <span>₹20,000 Raised</span>
+                <span>Goal: ₹80,000</span>
+            </div>
+
+            <!-- UPI Payment Section -->
+            <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200 max-w-sm mx-auto mb-4">
+                <span class="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded mb-3 inline-block">Instant Direct Transfer</span>
+                <h3 class="text-lg font-bold mb-4">Scan to Fund a Plate</h3>
+                
+                <div class="bg-gray-50 p-4 rounded-lg mb-4 flex justify-center border border-gray-200">
+                    <!-- Ensure your QR image is named qr-code.jpg and sits in the same repo folder -->
+                    <img src="qr-code.jpg" alt="Official UPI QR Code" class="w-48 h-48 object-contain">
+                </div>
+                
+                <!-- UPI ID with Copy Button -->
+                <div class="bg-gray-50 border border-gray-200 rounded p-3 mb-4 flex items-center justify-between text-left">
+                    <div>
+                        <p class="text-xs text-gray-500 uppercase tracking-wide font-semibold mb-1">Official UPI ID</p>
+                        <p class="text-sm font-mono font-bold text-gray-900" id="upi-id">BHARATPE2C0M0D6J5E45397@unitype</p>
+                    </div>
+                    <button onclick="copyUPI()" id="copy-btn" class="bg-gray-200 hover:bg-gray-300 text-gray-800 text-xs font-bold py-1.5 px-3 rounded transition-colors focus:outline-none">
+                        Copy
+                    </button>
+                </div>
+
+                <!-- Mobile Tap to Pay Link -->
+                <a href="upi://pay?pa=BHARATPE2C0M0D6J5E45397@unitype&pn=Student%20Food%20Relief" class="block w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-all md:hidden text-center shadow-md">
+                    Tap to Pay on Mobile
+                </a>
+                <p class="text-xs text-gray-500 mt-3 md:hidden">Opens GPay, PhonePe, or Paytm directly.</p>
+            </div>
+            <p class="text-xs text-gray-500 mt-4">⚠️ Send us a DM on Instagram with your screenshot to update the progress bar!</p>
+        </div>
+    </header>
+
+    <!-- Ground Reality Section -->
+    <section class="max-w-3xl mx-auto py-12 px-4">
+        <h2 class="text-2xl font-bold mb-6 border-l-4 border-blue-600 pl-3">The Ground Reality</h2>
+        <p class="text-gray-700 mb-4 leading-relaxed">The situation in Delhi is overwhelming. Hundreds of students are stranded without basic necessities. What started as a food crisis is rapidly turning into a health hazard due to accumulating waste.</p>
+        <p class="text-gray-700 mb-6 leading-relaxed">Our volunteer network is operating round-the-clock to distribute hot meals and deploy industrial dustbins and sanitation kits to prevent infections.</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center mt-8">
+            <div class="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
+                <div class="text-3xl mb-2">🍛</div>
+                <h3 class="font-bold text-lg">Food & Water</h3>
+                <p class="text-sm text-gray-600 mt-2">Sourcing hot meals from verified local kitchens.</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
+                <div class="text-3xl mb-2">🗑️</div>
+                <h3 class="font-bold text-lg">Sanitation</h3>
+                <p class="text-sm text-gray-600 mt-2">Buying heavy-duty dustbins and cleaning gear.</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
+                <div class="text-3xl mb-2">🩹</div>
+                <h3 class="font-bold text-lg">Medical Kits</h3>
+                <p class="text-sm text-gray-600 mt-2">Distributing ORS, masks, and basic first aid.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Transparency/Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-8 text-center text-sm px-4">
+        <p class="mb-2 font-semibold text-gray-200">Organized by Student Food Relief | Active in Delhi</p>
+        <p>Zero middlemen. Every rupee goes directly to ground supplies.</p>
+    </footer>
+
+    <!-- Copy to Clipboard Logic -->
+    <script>
+        function copyUPI() {
+            const upiText = document.getElementById("upi-id").innerText;
+            navigator.clipboard.writeText(upiText).then(() => {
+                const btn = document.getElementById("copy-btn");
+                // Visual feedback that it copied successfully
+                btn.innerText = "Copied!";
+                btn.classList.replace("bg-gray-200", "bg-green-100");
+                btn.classList.replace("text-gray-800", "text-green-800");
+                
+                // Reset button after 2 seconds
+                setTimeout(() => {
+                    btn.innerText = "Copy";
+                    btn.classList.replace("bg-green-100", "bg-gray-200");
+                    btn.classList.replace("text-green-800", "text-gray-800");
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+            });
+        }
+    </script>
+</body>
 </html>
